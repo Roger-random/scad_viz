@@ -41,18 +41,37 @@ module screen()
 // Put an instance of chassis in the space, translated a bit to make room for screen.
 color([0, 0, 1])
 {
-    translate([0, screenD+gap, 0])
+    translate([0, screenD*2+gap, 0])
     {
         chassis();
     }
 }
 
+// Screen fold animation
+lsFoldStart = 0;
+lsFoldEnd = 0.4;
+function lsFold() = timeRanged(lsFoldStart, timePadded(), lsFoldEnd);
+
+// Screen rotate animation
+sRStart = 0.4;
+sREnd = 0.7;
+function sRotate() = timeRanged(sRStart, timePadded(), sREnd);
+
+// Screen stowage animation
+stowStart = 0.7;
+stowEnd = 1.0;
+function stow() = timeRanged(stowStart, timePadded(), stowEnd);
+
 // Add two instances of screen into the space
-
-// Left screen
-translate([chassisW-screenW-(chassisW/2), 0, chassisH-(screenH/2)])
-    color([0, 1, 0]) screen();
-
-// Right screen
-translate([chassisW-(chassisW/2), 0, chassisH-(screenH/2)])
-    color([0, 1, 1]) screen();
+translate([screenH/2, screenD*2, screenW]) // Translate screen assembly hinge to final location
+rotate([90*stow(), 0, 0]) // Screen stowage animation
+rotate([0, 90*sRotate(), 0]) // Screen rotation
+rotate([0, 0, -90*lsFold()]) // Screen assembly folding
+translate([0, -screenD, -screenH/2]) // Translate screen assembly hinge to origin
+union() // Screen assembly
+{
+    rotate([0, 0, 180*lsFold()]) // Rotate relative to right screen (hinge between screens)
+        translate([-screenW, 0, 0]) // Translate into position relative to right screen.
+            color([0, 1, 0]) screen(); // Left screen
+    color([1, 0, 0]) screen(); // Right screen
+}
