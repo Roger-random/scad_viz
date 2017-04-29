@@ -1,5 +1,5 @@
-// Learning exercise to put the Luggable PC hinge visualization into OpenSCAD
-// 2017/04/28 - Roger Cheng
+// Concept 2-screen Luggable PC hinge visualization
+// 2017/04/29 - Roger Cheng
 use <time_utility.scad>
 
 // Gap in between pieces for 3D printer tolerance. Also useful for CSG difference()
