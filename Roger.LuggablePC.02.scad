@@ -19,7 +19,7 @@ cutoutH = 170;
 // Screen dimensions, as measured when open (so 90 degrees off from chassis)
 screenW = chassisH;
 screenH = chassisW;
-screenD = 20;
+screenD = 10;
 
 
 // Chassis bounding box - cutout box
@@ -32,7 +32,7 @@ module chassis()
     }
 }
 
-// Screen bounding box
+// Single screen bounding box
 module screen()
 {
     cube([screenW, screenD, screenH]);
@@ -47,24 +47,12 @@ color([0, 0, 1])
     }
 }
 
-// Add an instance of screen into the space, including animation for hinge operation
-color([0, 1, 0])
-{
-    centerD = screenD/2;
+// Add two instances of screen into the space
 
-    // Translate the screen to its position relative to chassis.
-    translate([chassisW-screenW, 0, chassisH-screenH])
-    
-    // Translate the screen back to the originally-constructed location.
-    translate([screenW-centerD, centerD, screenH-centerD])
-    // The two axis of hinge movement
-    rotate([0, 90*timeRanged(0, timePadded(), 0.9), 0])
-    rotate([0, 0, 180*timeRanged(0.1, timePadded(), 1)])
-    {
-        // Translate screen to align center of rotation with origin.
-        translate([centerD-screenW, -centerD, centerD-screenH])
-        {
-            screen();
-        }
-    }
-}
+// Left screen
+translate([chassisW-screenW-(chassisW/2), 0, chassisH-(screenH/2)])
+    color([0, 1, 0]) screen();
+
+// Right screen
+translate([chassisW-(chassisW/2), 0, chassisH-(screenH/2)])
+    color([0, 1, 1]) screen();
