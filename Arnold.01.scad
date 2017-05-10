@@ -15,10 +15,13 @@ function scrFlip() = timeRanged(0.5, timePadded(), 1.0);
 
 
 // Physical construction
-
 screenW = 450;
 screenH = 285;
 screenD = 5;
+
+bodyW = screenW;
+bodyH = screenH;
+bodyD = 50;
 
 module screen()
 {
@@ -61,8 +64,8 @@ module right()
 module screenAssembly()
 {
     // Translate+Rotate back to proper world location
+    translate([screenW/2, screenH, -screenD])
     rotate([-120, 0, 0])
-    translate([screenW/2, screenH, screenD])
     
     // Rotate for screen closing
     rotate([120*scrFlip(), 0, 0])
@@ -70,11 +73,22 @@ module screenAssembly()
     // Translate for screen assembly hinge
     translate([-screenW/2, -screenH, screenD])
     {
-        left();
-        center();
-        right();
+        color([0, 0.5, 0]) left();
+        color([0.5, 0, 0]) center();
+        color([0, 0, 0.5]) right();
     }
 }
 
+module bodyAssembly()
+{
+    translate([0, 0, -bodyD-screenD])
+    cube([bodyW, bodyH, bodyD]);
+}
 
-screenAssembly();
+module masterAssembly()
+{
+    screenAssembly();
+    bodyAssembly();
+}
+
+masterAssembly();
