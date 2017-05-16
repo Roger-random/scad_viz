@@ -11,9 +11,10 @@ bodyW = screenW;
 bodyH = screenH;
 
 // Time utilities
-function scrRise() = timeRanged(0, timePadded(), 0.25);
-function scrMove() = timeRanged(0.25, timePadded(), 0.5);
-function scrUnfold() = timeRanged(0.5, timePadded(), 1.0);
+function scrRise() = timeRanged(0, timePadded(), 0.2);
+function scrMove() = timeRanged(0.2, timePadded(), 0.4);
+function scrUnfold() = timeRanged(0.2, timePadded(), 0.4);
+function scrWrap() = timeRanged(0.6, timePadded(), 1.0);
 function screenDistance() = sqrt(3)*bodyW/6 + screenD;
 
 // Physical construction
@@ -33,6 +34,7 @@ module screenLeft()
 {
   // Screen hinge rotation
   translate([-screenW/2, screenDistance()-screenD, 0])
+  rotate([0, 0, -140*scrWrap()])
   rotate([0, 0, -100*scrUnfold()])
   translate([screenW/2, -screenDistance()+screenD, 0])
   
@@ -45,6 +47,7 @@ module screenRight()
 {
   // Screen hinge rotation
   translate([screenW/2, screenDistance()-screenD, 0])
+  rotate([0, 0, 140*scrWrap()])
   rotate([0, 0, 100*scrUnfold()])
   translate([-screenW/2, -screenDistance()+screenD, 0])
   
@@ -54,7 +57,8 @@ module screenRight()
 
 module screenAssembly()
 {
-  translate([0, -screenDistance*scrMove(), 0])
+  translate([0, -screenDistance()*scrWrap(), 0])
+  translate([0, -screenDistance()*scrMove(), 0])
   translate([0, 0, screenH*scrRise()])
   union()
   {
